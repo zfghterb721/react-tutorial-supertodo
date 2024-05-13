@@ -9,12 +9,16 @@ const rulesText = [
 ];
 
 const SuperListItem = (props) => {
+  //really just a getter and a setter
   const [checked, setChecked] = useState(false);
+
+  const [checked2, setChecked2] = useState(false);
 
   return (
     <>
       <li>
-        {checked?<s>{props.itemText}</s>:props.itemText} 
+        {checked ? <s>{props.itemText}</s> : props.itemText}
+        {checked2 ? "!!!!" : ""}
         <input
           type="checkbox"
           value={checked}
@@ -22,12 +26,32 @@ const SuperListItem = (props) => {
             setChecked(!checked);
           }}
         ></input>
+
+        <input
+          type="checkbox"
+          value={checked2}
+          onChange={() => {
+            setChecked2(!checked2);
+          }}
+        ></input>
+        <button onClick={() => props.deleteItem()}>Delete</button>
       </li>
     </>
   );
 };
 
 function App() {
+  const [newItemInput, setNewItemInput] = useState("");
+  const [list, setList] = useState(rulesText);
+
+  function deleteItem(index) {
+    return function () {
+      console.log("delete", index);
+      const newList = list.filter((item, i) => i !== index);
+      setList(newList);
+    };
+  }
+
   return (
     <div className="App">
       This is just regular HTML except you can throw in js when you want:
@@ -36,10 +60,26 @@ function App() {
       <br />
       Some extra rules:
       <ul>
-        {rulesText.map((r) => (
-          <SuperListItem itemText={r} />
+        {list.map((r, i) => (
+          <SuperListItem itemText={r} deleteItem={deleteItem(i)} />
         ))}
       </ul>
+      <form>
+        <input
+          type="text"
+          value={newItemInput}
+          onChange={(e) => setNewItemInput(e.target.value)}
+        ></input>
+        <button
+          onClick={(e) => {
+            e.preventDefault(); //do this so the webpage doesn't try to submit the form oldschool
+            setList([...list, newItemInput]);
+            setNewItemInput("");
+          }}
+        >
+          Add To Do
+        </button>
+      </form>
     </div>
   );
 }
