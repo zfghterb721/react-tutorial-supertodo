@@ -17,23 +17,27 @@ const SuperListItem = (props) => {
   return (
     <>
       <li>
-        {checked ? <s>{props.itemText}</s> : props.itemText}
-        {checked2 ? "!!!!" : ""}
+            
+        {checked ? <s>{props.itemText}</s> : checked2 ? <b style={{color: "red"}}>{props.itemText}</b> : props.itemText}
         <input
-          type="checkbox"
-          value={checked}
           onChange={() => {
-            setChecked(!checked);
+            setChecked(!checked);       
+            if(checked) setChecked2(false);
           }}
+          type="checkbox"
+          checked={checked}          
         ></input>
 
         <input
-          type="checkbox"
-          value={checked2}
           onChange={() => {
-            setChecked2(!checked2);
+            setChecked2(!checked2); 
+            if(checked2) setChecked(false);
           }}
+          type="checkbox"
+          checked={checked2}
+          
         ></input>
+        
         <button onClick={() => props.deleteItem()}>Delete</button>
       </li>
     </>
