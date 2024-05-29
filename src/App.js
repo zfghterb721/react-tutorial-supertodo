@@ -9,35 +9,49 @@ const rulesText = [
 ];
 
 const SuperListItem = (props) => {
+
   //really just a getter and a setter
   const [checked, setChecked] = useState(false);
 
   const [checked2, setChecked2] = useState(false);
 
+  console.log("rendering", checked, checked2);
+
+  const trySetCheck = () => {
+    console.log("checked fire 1", checked);
+    setChecked(!checked);
+    console.log("checked fire 2", checked);
+    if (!checked && checked2) {
+      setChecked2(false);
+    }
+  };
+
+  const trySetCheck2 = () => {
+    console.log("checked2", checked2);
+    setChecked2(!checked2);
+    if (!checked2 && checked) {
+      setChecked(false);
+    }
+  };
+
   return (
     <>
       <li>
-            
-        {checked ? <s>{props.itemText}</s> : checked2 ? <b style={{color: "red"}}>{props.itemText}</b> : props.itemText}
-        <input
-          onChange={() => {
-            setChecked(!checked);       
-            if(checked) setChecked2(false);
-          }}
-          type="checkbox"
-          checked={checked}          
-        ></input>
+        {checked ? (
+          <s>{props.itemText}</s>
+        ) : checked2 ? (
+          <b style={{ color: "red" }}>{props.itemText}</b>
+        ) : (
+          props.itemText
+        )}
+        <input onChange={trySetCheck} type="checkbox" checked={checked}></input>
 
         <input
-          onChange={() => {
-            setChecked2(!checked2); 
-            if(checked2) setChecked(false);
-          }}
+          onChange={trySetCheck2}
           type="checkbox"
           checked={checked2}
-          
         ></input>
-        
+
         <button onClick={() => props.deleteItem()}>Delete</button>
       </li>
     </>
